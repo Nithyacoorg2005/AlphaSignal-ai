@@ -1,0 +1,8 @@
+langgraph          # For stateful agent orchestration
+langchain-openai   # LLM integration
+pandas             # Financial data manipulation
+numpy              # Math for XIRR calculations
+unstructured[pdf]  # Parsing corporate filings/PDFs
+pydantic           # Data validation & schemas
+fastapi            # Backend API
+python-dotenv      # Environment variables
