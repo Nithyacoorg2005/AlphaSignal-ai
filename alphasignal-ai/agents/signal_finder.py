@@ -10,8 +10,7 @@ class SignalFinder:
         Calculates a dynamic signal based on the ticker name.
         This ensures the UI updates and doesn't show the 'same result'.
         """
-        # Logic 1: Technical Signal (Mocked dynamic logic)
-        # We use the length of the ticker to fake different strengths
+       
         strength = 0.5 + (len(ticker) % 5) / 10 
         
         technical_signal = {
@@ -20,14 +19,14 @@ class SignalFinder:
             "confidence": strength
         }
 
-        # Logic 2: Fundamental Delta
+       
         fundamental_delta = {
             "tone_shift": "Positive" if "A" in ticker.upper() else "Neutral",
             "key_change": f"Guidance updated for {ticker} fiscal year 2026.",
             "source_ref": f"Filing_ID_{ticker}_2026_Q4"
         }
 
-        # Return ONE consolidated dictionary
+        
         return {
             "data": {
                 "ticker": ticker,

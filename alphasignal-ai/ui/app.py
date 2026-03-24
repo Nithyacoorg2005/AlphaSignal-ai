@@ -4,19 +4,16 @@ import json
 
 st.set_page_config(page_title="ALPHASIGNAL AI", layout="wide", initial_sidebar_state="expanded")
 
-# --- CLEAN MINIMALIST CSS ---
 st.markdown("""
    <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-    
-    /* 1. Global Reset: Sharper Text Rendering */
+  
     html, body, [class*="st-"] { 
         font-family: 'Inter', sans-serif !important; 
         -webkit-font-smoothing: antialiased;
     }
     .stApp { background-color: #0d1117; }
 
-    /* 2. Sidebar: Fixed Width & Professional Border */
     section[data-testid="stSidebar"] {
         background-color: #161b22 !important;
         border-right: 1px solid #30363d !important;
@@ -24,7 +21,7 @@ st.markdown("""
         max-width: 350px !important;
     }
 
-    /* 3. Terminal Labels: Bloomberg-Style Headers */
+    
     .terminal-label {
         color: #58a6ff;
         font-size: 0.65rem;
@@ -35,7 +32,7 @@ st.markdown("""
         opacity: 0.9;
     }
 
-    /* 4. The Action Button: "High-Stakes" Styling */
+    
     div.stButton > button {
         background-color: #238636 !important;
         color: #ffffff !important;
@@ -56,7 +53,7 @@ st.markdown("""
         box-shadow: 0 0 15px rgba(46, 160, 67, 0.4) !important; /* Subtle Green Glow */
     }
 
-    /* 5. Clean Scrollbar: Custom Dark Theme */
+    
     ::-webkit-scrollbar {
         width: 6px;
     }
@@ -71,7 +68,7 @@ st.markdown("""
         background: #58a6ff;
     }
 
-    /* 6. Kill All Broken Icons (keyboard_double fix) */
+    
     button[data-testid="sidebar-close-button"], 
     [data-testid="stSidebarNav"] svg,
     [data-testid="stIcon"],
@@ -80,7 +77,6 @@ st.markdown("""
         display: none !important;
     }
 
-    /* 7. Typography: Metric Values & Code Blocks */
     [data-testid="stMetricValue"] {
         color: #00ffc2 !important; /* Fintech Cyan */
         font-weight: 800 !important;
@@ -94,23 +90,23 @@ st.markdown("""
         border-radius: 4px !important;
     }
 
-    /* Remove top padding for that 'Dossier' look */
+    
     .st-emotion-cache-1jicfl2 { padding-top: 2rem !important; }
 </style>
     """, unsafe_allow_html=True)
 
-# --- SIDEBAR: FOCUS ON ACTION ---
+
 with st.sidebar:
     st.title("ALPHASIGNAL")
     st.caption("v2.0 // Institutional Intelligence")
     
     st.markdown("---")
     
-    # 1. INPUT: Only what is necessary
+ 
     st.markdown('<p class="terminal-label">Asset Entry</p>', unsafe_allow_html=True)
     ticker = st.text_input("TICKER SYMBOL", value="RELIANCE", label_visibility="collapsed").upper().strip()
     
-    # Hidden Portfolio (Backend still needs this for the audit)
+    
     portfolio_data = {
         "holdings": [
             {"ticker": "HDFC", "sector": "Banking"},
@@ -123,7 +119,7 @@ with st.sidebar:
 
     st.markdown("---")
     
-    # 2. DIAGNOSTICS: Trust Indicators
+    
     st.markdown('<p class="terminal-label">Agent Logic Weight</p>', unsafe_allow_html=True)
     if st.session_state.get('analysis_result'):
         res = st.session_state.analysis_result
@@ -137,7 +133,7 @@ with st.sidebar:
     else:
         st.info("System Ready.")
 
-# --- MAIN DISPLAY ---
+
 st.markdown(f"## {ticker} // ADVERSARIAL AUDIT")
 st.markdown("---")
 

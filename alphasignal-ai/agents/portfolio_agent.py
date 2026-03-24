@@ -8,9 +8,9 @@ class PortfolioAgent:
         """
         current_portfolio = state["portfolio_context"].get("holdings", [])
         new_ticker = state["ticker"]
-        new_sector = "Banking"  # Mock sector lookup
+        new_sector = "Banking"  
         
-        # Calculate Sector Concentration
+     
         sector_counts = {}
         for stock in current_portfolio:
             s = stock.get("sector", "Unknown")
@@ -19,7 +19,7 @@ class PortfolioAgent:
         current_concentration = sector_counts.get(new_sector, 0) / len(current_portfolio) if current_portfolio else 0
         
         risk_flag = False
-        if current_concentration > 0.25:  # 25% Max Sector Cap
+        if current_concentration > 0.25: 
             risk_flag = True
             
         message = f"Portfolio analysis complete. Sector exposure: {round(current_concentration*100, 2)}%."

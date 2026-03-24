@@ -4,9 +4,9 @@ import numpy as np
 class ExecutionSimulator:
     def __init__(self, initial_capital=100000.0):
         self.capital = initial_capital
-        self.brokerage_rate = 0.0005  # 0.05% per trade
-        self.slippage_rate = 0.0003   # 0.03% impact cost
-        self.stcg_tax = 0.15          # 15% Short Term Capital Gains
+        self.brokerage_rate = 0.0005 
+        self.slippage_rate = 0.0003   
+        self.stcg_tax = 0.15          
 
     def calculate_net_return(self, entry_price: float, exit_price: float, quantity: int) -> dict:
         """

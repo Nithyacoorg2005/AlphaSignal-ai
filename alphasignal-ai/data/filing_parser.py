@@ -34,10 +34,7 @@ class FilingDeltaExtractor:
         prompt = PromptTemplate.from_template(template)
         chain = prompt | self.llm
         
-        # We process chunks to stay within context window limits
+       
         response = chain.invoke({"prev_q": prev_q_text[:4000], "curr_q": curr_q_text[:4000]})
         return response.content
 
-# Example usage for your demo
-# extractor = FilingDeltaExtractor()
-# delta = extractor.find_management_delta(q3_text, q4_text)

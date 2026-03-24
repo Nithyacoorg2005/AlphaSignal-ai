@@ -3,11 +3,11 @@ from engine.graph import app as signal_engine
 
 api = FastAPI(title="AlphaSignal AI Backend")
 
-# api/main.py
+
 
 @api.post("/analyze")
 async def run_analysis(ticker: str, portfolio: dict):
-    # CRITICAL: Ensure 'ticker' here matches the 'ticker' in the argument
+    
     initial_state = {
         "ticker": ticker, 
         "portfolio_context": portfolio,
@@ -16,7 +16,7 @@ async def run_analysis(ticker: str, portfolio: dict):
         "signal_data": None,
         "sources": []
     }
-    # Force a fresh invocation
+    
     final_state = signal_engine.invoke(initial_state)
     return final_state
     
