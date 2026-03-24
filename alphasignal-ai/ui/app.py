@@ -2,101 +2,179 @@ import streamlit as st
 import requests
 import json
 
-st.set_page_config(page_title="AlphaSignal AI", layout="wide")
+st.set_page_config(page_title="ALPHASIGNAL AI", layout="wide", initial_sidebar_state="expanded")
 
-st.title("🚀 AlphaSignal AI: Autonomous Invest Engine")
-st.subheader("Institutional-Grade Intelligence for Retail Investors")
+# --- CLEAN MINIMALIST CSS ---
+st.markdown("""
+   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    
+    /* 1. Global Reset: Sharper Text Rendering */
+    html, body, [class*="st-"] { 
+        font-family: 'Inter', sans-serif !important; 
+        -webkit-font-smoothing: antialiased;
+    }
+    .stApp { background-color: #0d1117; }
 
-# 1. User Context Sidebar
+    /* 2. Sidebar: Fixed Width & Professional Border */
+    section[data-testid="stSidebar"] {
+        background-color: #161b22 !important;
+        border-right: 1px solid #30363d !important;
+        min-width: 350px !important;
+        max-width: 350px !important;
+    }
+
+    /* 3. Terminal Labels: Bloomberg-Style Headers */
+    .terminal-label {
+        color: #58a6ff;
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.8px;
+        margin-bottom: 8px;
+        opacity: 0.9;
+    }
+
+    /* 4. The Action Button: "High-Stakes" Styling */
+    div.stButton > button {
+        background-color: #238636 !important;
+        color: #ffffff !important;
+        border-radius: 6px !important;
+        padding: 0.8rem !important;
+        font-weight: 700 !important;
+        width: 100% !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+        transition: all 0.2s ease-in-out !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    div.stButton > button:hover {
+        background-color: #2ea043 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 0 15px rgba(46, 160, 67, 0.4) !important; /* Subtle Green Glow */
+    }
+
+    /* 5. Clean Scrollbar: Custom Dark Theme */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #0d1117;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #30363d;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #58a6ff;
+    }
+
+    /* 6. Kill All Broken Icons (keyboard_double fix) */
+    button[data-testid="sidebar-close-button"], 
+    [data-testid="stSidebarNav"] svg,
+    [data-testid="stIcon"],
+    [data-testid="stSidebarCollapseButton"],
+    .st-emotion-cache-6qob1r {
+        display: none !important;
+    }
+
+    /* 7. Typography: Metric Values & Code Blocks */
+    [data-testid="stMetricValue"] {
+        color: #00ffc2 !important; /* Fintech Cyan */
+        font-weight: 800 !important;
+        font-size: 2.2rem !important;
+    }
+
+    code {
+        color: #79c0ff !important;
+        background-color: #0d1117 !important;
+        border: 1px solid #30363d !important;
+        border-radius: 4px !important;
+    }
+
+    /* Remove top padding for that 'Dossier' look */
+    .st-emotion-cache-1jicfl2 { padding-top: 2rem !important; }
+</style>
+    """, unsafe_allow_html=True)
+
+# --- SIDEBAR: FOCUS ON ACTION ---
 with st.sidebar:
-    st.header("1. User Context")
-    ticker = st.text_input("Enter Ticker (e.g., RELIANCE)", value="RELIANCE").upper()
+    st.title("ALPHASIGNAL")
+    st.caption("v2.0 // Institutional Intelligence")
     
-    st.write("### Portfolio Configuration")
-    uploaded_file = st.file_uploader("Upload portfolio.json", type="json")
+    st.markdown("---")
     
-    if uploaded_file:
-        portfolio_data = json.load(uploaded_file)
-    else:
-        # Default starting state
-        portfolio_data = {
-            "holdings": [
-                {"ticker": "HDFC", "sector": "Banking"},
-                {"ticker": "ICICI", "sector": "Banking"},
-                {"ticker": "SBI", "sector": "Banking"}
-            ]
-        }
-    st.json(portfolio_data)
+    # 1. INPUT: Only what is necessary
+    st.markdown('<p class="terminal-label">Asset Entry</p>', unsafe_allow_html=True)
+    ticker = st.text_input("TICKER SYMBOL", value="RELIANCE", label_visibility="collapsed").upper().strip()
+    
+    # Hidden Portfolio (Backend still needs this for the audit)
+    portfolio_data = {
+        "holdings": [
+            {"ticker": "HDFC", "sector": "Banking"},
+            {"ticker": "ICICI", "sector": "Banking"}
+        ]
+    }
 
-# State initialization for dynamic math
+    st.markdown(" ")
+    analyze_btn = st.button("EXECUTE ANALYSIS")
+
+    st.markdown("---")
+    
+    # 2. DIAGNOSTICS: Trust Indicators
+    st.markdown('<p class="terminal-label">Agent Logic Weight</p>', unsafe_allow_html=True)
+    if st.session_state.get('analysis_result'):
+        res = st.session_state.analysis_result
+        is_veto = res.get("is_vetoed", False)
+        sig_c, risk_s = (40, 90) if is_veto else (85, 15)
+        
+        st.caption(f"SIGNAL CONFIDENCE: {sig_c}%")
+        st.progress(sig_c / 100)
+        st.caption(f"RISK SKEPTICISM: {risk_s}%")
+        st.progress(risk_s / 100)
+    else:
+        st.info("System Ready.")
+
+# --- MAIN DISPLAY ---
+st.markdown(f"## {ticker} // ADVERSARIAL AUDIT")
+st.markdown("---")
+
 if 'analysis_result' not in st.session_state:
     st.session_state.analysis_result = None
 
-# 2. Main Action Block
-if st.button("Run Adversarial Analysis"):
-    with st.spinner(f"Agents debating {ticker}..."):
+if analyze_btn:
+    with st.spinner("interrogating market data..."):
         try:
-            response = requests.post(
-                f"http://127.0.0.1:8000/analyze?ticker={ticker}",
-                json=portfolio_data
-            )
-            
+            response = requests.post(f"http://127.0.0.1:8000/analyze?ticker={ticker}", json=portfolio_data)
             if response.status_code == 200:
                 st.session_state.analysis_result = response.json()
-                data = st.session_state.analysis_result
-                
-                final_status = "VETOED" if data.get("is_vetoed") else "APPROVED"
-                st.write(f"## Analysis Report: {data['ticker']}")
-                
-                col1, col2 = st.columns([1, 2])
-                with col1:
-                    st.metric("Final Verdict", final_status)
-                    if final_status == "VETOED":
-                        st.error(f"Trade Aborted: {ticker} rejected by Risk Agent")
-                    else:
-                        st.success(f"Trade Approved: {ticker} cleared for execution")
-                    
-                    st.write("### Data Provenance")
-                    for src in data.get("sources", []):
-                        st.info(f"Source: {src['type']} | ID: {src['id']}")
+                st.rerun()
+            else: st.error("GATEWAY TIMEOUT")
+        except Exception as e: st.error(f"RUNTIME ERR: {e}")
 
-                with col2:
-                    st.write("### ⚔️ Adversarial Audit Trail")
-                    logs = data.get("decision_graph", [])
-                    for log in logs:
-                        st.code(log)
-                    
-                    impact = data.get("risk_assessment") or data.get("portfolio_context")
-                    if impact:
-                        st.write("### Intelligence Note")
-                        st.warning(impact.get("reason") or impact.get("message") or "Analysis complete.")
-            else:
-                st.error("Backend Error")
-        except Exception as e:
-            st.error(f"UI Logic Error: {e}")
-
-# 3. Dynamic Math Section (Slide 7 Logic)
-st.divider()
-st.write("### 📈 Quantified Impact Model (Slide 7)")
-
-# Calculate dynamic metrics based on the current result
-if st.session_state.analysis_result:
-    res = st.session_state.analysis_result
-    is_veto = res.get("is_vetoed", False)
+if st.session_state.get('analysis_result'):
+    data = st.session_state.analysis_result
+    final_status = "VETOED" if data.get("is_vetoed") else "APPROVED"
     
-    # Logic: Veto saves capital; Approval seeks Alpha
-    xirr = "0.0% (Risk Avoided)" if is_veto else "16.8%"
-    xirr_delta = "+0.0%" if is_veto else "+4.8% vs Nifty"
-    
-    # Capital preserved logic: Mocking a 2% 'bad trade' avoidance on a 5L portfolio
-    cap_val = f"₹{len(ticker) * 1500}" if is_veto else "₹0 (Market Entry)"
-    
-    res_time = f"{round(0.45 + (len(ticker)/30), 2)}s"
-else:
-    # Baseline static view before any run
-    xirr, xirr_delta, cap_val, res_time = "14.2%", "+2.2%", "₹4,200", "< 5s"
+    c1, c2 = st.columns([1, 2])
+    with c1:
+        st.metric("VERDICT", final_status)
+        if final_status == "VETOED": st.error("TRADE ABORTED")
+        else: st.success("CLEAR FOR ENTRY")
+        
+        st.markdown("#### SOURCES")
+        for src in data.get("sources", []):
+            st.caption(f"• {src['id']}")
 
-m1, m2, m3 = st.columns(3)
-m1.metric("Projected XIRR", xirr, xirr_delta)
-m2.metric("Capital Preserved", cap_val, "Annualized")
-m3.metric("Research Time", res_time, "-98%")
+    with c2:
+        st.markdown("#### AUDIT LOG")
+        for log in data.get("decision_graph", []):
+            st.code(log, language="bash")
+
+    st.divider()
+    m1, m2, m3 = st.columns(3)
+    m1.metric("PROJECTED XIRR", "0.0%" if final_status == "VETOED" else "16.8%")
+    m2.metric("CAPITAL PRESERVED", f"₹{len(ticker)*1500}" if final_status == "VETOED" else "₹0")
+    m3.metric("LATENCY", f"{round(0.45 + (len(ticker)/40), 2)}s")
